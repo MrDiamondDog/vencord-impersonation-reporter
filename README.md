@@ -1,6 +1,6 @@
 # Vencord Website Virus Checker
 
-A very simple script to check for websites that are impersonating Vencord, because this has happened more than once.
+A very simple script to check for websites that are impersonating Vencord, because this has happened more than once. The only website owned by us is https://vencord.dev/.
 
 The websites below are impersonations of the Vencord website. Please report these if you can and do not go to them.
 
