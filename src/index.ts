@@ -1,6 +1,8 @@
 import fs from "fs";
 import "dotenv/config";
 
+const tldUrl = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
+
 let outFile: string | undefined = process.argv[2];
 
 if (outFile === "--report") outFile = undefined;
@@ -16,7 +18,13 @@ enum Colors {
     RESET = "\x1b[0m"
 }
 
+
+const found: string[] = [];
 const timedOut: string[] = [];
+const whitelist = [
+    "DEV",
+    "KZ" // just some random company
+];
 
 async function urlStatus(url: string) {
     return fetch(url).then(res => res.status).catch(async e => {
@@ -29,15 +37,9 @@ async function urlStatus(url: string) {
     });
 }
 
-const TLDs = JSON.parse(fs.readFileSync("./tlds.json", "utf-8"));
-
-const found: string[] = [];
-const whitelist = [
-    "DEV",
-    "KZ" // just some random company
-];
-
 (async () => {
+    const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.split("\n").slice(1));
+
     await new Promise<void>(async resolve => {
         let done = 0;
         for (const tld of TLDs) {
