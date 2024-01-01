@@ -38,7 +38,7 @@ async function urlStatus(url: string) {
 }
 
 (async () => {
-    const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.split("\n").slice(1));
+    const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
 
     await new Promise<void>(async resolve => {
         let done = 0;
