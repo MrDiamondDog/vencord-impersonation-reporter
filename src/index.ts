@@ -46,15 +46,15 @@ async function urlStatus(url: string) {
             await urlStatus(`https://vencord.${tld}`).then(status => {
                 if (status !== 404) {
                     if (outFile) fs.appendFileSync(outFile, 
-                        `https://vencord.${tld}... ${status} ${whitelist.includes(tld) ? "(whitelisted)" : ""}\n`);
+                        `https://vencord.${tld} ... ${status} ${whitelist.includes(tld) ? "(whitelisted)" : ""}\n`);
                     else console.log(
-                        `(${done + 1}/${TLDs.length}) https://vencord.${tld}... ${Colors.RED}${status}${Colors.GRAY} ${whitelist.includes(tld) ? "(whitelisted)" : ""}${Colors.RESET}`)
+                        `(${done + 1}/${TLDs.length}) https://vencord.${tld} ... ${Colors.RED}${status}${Colors.GRAY} ${whitelist.includes(tld) ? "(whitelisted)" : ""}${Colors.RESET}`)
                     
                     if (!whitelist.includes(tld)) found.push(tld);
                 } else {
-                    if (outFile) fs.appendFileSync(outFile, `https://vencord.${tld}... ${status}\n`);
+                    if (outFile) fs.appendFileSync(outFile, `https://vencord.${tld} ... ${status}\n`);
                     else console.log(
-                        `(${done + 1}/${TLDs.length}) https://vencord.${tld}... ${Colors.GREEN}${status}${Colors.RESET}`);
+                        `(${done + 1}/${TLDs.length}) https://vencord.${tld} ... ${Colors.GREEN}${status}${Colors.RESET}`);
                 }
 
                 done++;

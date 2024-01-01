@@ -20,7 +20,6 @@ jobs:
             - name: Install dependencies
               run: pnpm i
 
-              # give access to env variables
             - name: Run workflow
               run: pnpm start --report
               env:
