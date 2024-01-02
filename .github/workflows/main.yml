@@ -3,9 +3,7 @@ name: Weekly Impersonation Report
 on:
     schedule:
         - cron: "0 0 * * 0" # This will run the workflow every Sunday at 00:00
-    push:
-        branches:
-            - master
+    workflow_dispatch:
 
 jobs:
     build:
