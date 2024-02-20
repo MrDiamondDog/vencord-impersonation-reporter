@@ -5,7 +5,7 @@ const tldUrl = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
 
 let outFile: string | undefined = process.argv[2];
 
-if (outFile === "--report") outFile = undefined;
+if (outFile.startsWith("--")) outFile = undefined;
 
 if (outFile) {
     fs.rmSync(outFile, { force: true });
@@ -37,8 +37,13 @@ async function urlStatus(url: string) {
     });
 }
 
+function bufferToBlob(buffer: Buffer, type: string) {
+    return new Blob([buffer], { type });
+}
+
 (async () => {
-    const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
+    // const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
+    const TLDs = ["abc", "xyz", "app", "tech"];
 
     await new Promise<void>(async resolve => {
         let done = 0;
@@ -77,10 +82,35 @@ async function urlStatus(url: string) {
         else console.log(`${Colors.GREEN}No TLDs found!${Colors.RESET}`);
     }
 
+    const images: string[] = [];
+    if (process.argv.includes("--screenshot")) {
+        console.log("\nTaking screenshots...");
+
+        if (fs.existsSync("./screenshots")) fs.rmSync("./screenshots", { recursive: true, force: true });
+        fs.mkdirSync("./screenshots");
+
+        const puppeteer = await import("puppeteer");
+
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        for (const tld of found) {
+            await page.goto(`https://vencord.${tld}`);
+            await page.screenshot({ path: `./screenshots/${tld}.png` });
+            images.push(`./screenshots/${tld}.png`);
+        }
+
+        await browser.close();
+
+        console.log("Took screenshots!");
+    }
+
     if (process.argv.includes("--report")) {
         console.log("\nSending report...");
 
-        const body = {
+        const body = new FormData();
+
+        body.append("payload_json", JSON.stringify({
             embeds: [{
                 title: "Impersonation Report",
                 description: (found.length > 0 ? `Found ${found.length} website(s)!` : "No websites found!"),
@@ -96,21 +126,26 @@ async function urlStatus(url: string) {
                     } : undefined)
                 ].filter(Boolean),
                 timestamp: new Date().toISOString()
-            }]
-        };
-
-        await new Promise(resolve => setTimeout(resolve, 10000));
+            }, ...images.map((filename, i) => ({
+                title: `vencord.${found[i]}`,
+                image: {
+                    url: `attachment://screenshot-${i}.png`
+                },
+                color: 0xFF0000
+            }))]
+        }));
+        
+        images.forEach((image, i) => {
+            body.append(`files[${i}]`, bufferToBlob(fs.readFileSync(image), "image/png"), `screenshot-${i}.png`);
+        });
 
         await fetch(process.env.WEBHOOK_URL!, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body)
-        }).then(res => {
-            if (!res.ok) throw new Error("Failed to send report!");
-
+            body
+        }).then(async res => {
             console.log(`${res.status} ${res.statusText}`)
+            const body = await res.text();
+            if (!res.ok) throw new Error("Failed to send report!\n" + body);
         }).catch(e => {
             console.error(e);
             process.exit(1);

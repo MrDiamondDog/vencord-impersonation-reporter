@@ -13,12 +13,16 @@ jobs:
             - uses: actions/checkout@v2
 
             - name: Install pnpm
-              run: curl -f https://get.pnpm.io/v6.js | node - add --global pnpm
+              run: curl -f https://get.pnpm.io/v6.js | node - add --global pnpm\
 
             - name: Install dependencies
+              env:
+                  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
               run: pnpm i
 
             - name: Run workflow
-              run: pnpm start --report
+              uses: mujo-code/puppeteer-headful@18.9.0
+              with:
+                  args: pnpm start --report
               env:
                   WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
