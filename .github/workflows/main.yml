@@ -20,6 +20,6 @@ jobs:
             - name: Run workflow
               uses: mujo-code/puppeteer-headful@18.9.0
               with:
-                  args: npm start --report
+                  args: npm start --report --screenshot
               env:
                   WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}

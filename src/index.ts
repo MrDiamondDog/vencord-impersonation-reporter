@@ -5,7 +5,7 @@ const tldUrl = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
 
 let outFile: string | undefined = process.argv[2];
 
-if (outFile.startsWith("--")) outFile = undefined;
+if (outFile?.startsWith("--")) outFile = undefined;
 
 if (outFile) {
     fs.rmSync(outFile, { force: true });
@@ -126,7 +126,7 @@ function bufferToBlob(buffer: Buffer, type: string) {
                     } : undefined)
                 ].filter(Boolean),
                 timestamp: new Date().toISOString()
-            }, ...images.map((filename, i) => ({
+            }, ...images.map((_, i) => ({
                 title: `vencord.${found[i]}`,
                 image: {
                     url: `attachment://screenshot-${i}.png`
