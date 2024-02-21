@@ -91,7 +91,7 @@ function bufferToBlob(buffer: Buffer, type: string) {
 
         const puppeteer = await import("puppeteer");
 
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ defaultViewport: { width: 1920, height: 1080 } });
         const page = await browser.newPage();
 
         for (const tld of found) {
@@ -152,6 +152,14 @@ function bufferToBlob(buffer: Buffer, type: string) {
         });
         console.log("Sent report!");
     }
+
+    console.log("Results -------")
+    console.log(`Found: ${found.length}`);
+    console.log(`Timed out: ${timedOut.length}`);
+    console.log(`Whitelisted: ${whitelist.length}`);
+    console.log(`Total: ${found.length + timedOut.length + whitelist.length}`);
+    if (process.argv.includes("--screenshot")) console.log("Screenshots located in ./screenshots");
+    if (process.argv.includes("--report")) console.log("Report sent!");
 
     process.exit(0);
 })();
