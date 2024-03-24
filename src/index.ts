@@ -42,8 +42,8 @@ function bufferToBlob(buffer: Buffer, type: string) {
 }
 
 (async () => {
-    // const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
-    const TLDs = ["abc", "xyz", "app", "tech"];
+    const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
+    // const TLDs = ["abc", "xyz", "app", "tech"];
 
     await new Promise<void>(async resolve => {
         let done = 0;
