@@ -42,8 +42,8 @@ function bufferToBlob(buffer: Buffer, type: string) {
 }
 
 (async () => {
-    // const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
-    const TLDs = ["abc", "xyz", "app", "tech"];
+    const TLDs = await fetch(tldUrl).then(res => res.text()).then(text => text.trim().split("\n").slice(1));
+    // const TLDs = ["abc", "xyz", "app", "tech"];
 
     await new Promise<void>(async resolve => {
         let done = 0;
@@ -89,18 +89,22 @@ function bufferToBlob(buffer: Buffer, type: string) {
         if (fs.existsSync("./screenshots")) fs.rmSync("./screenshots", { recursive: true, force: true });
         fs.mkdirSync("./screenshots");
 
-        const puppeteer = await import("puppeteer");
+        try {
+            const puppeteer = await import("puppeteer");
 
-        const browser = await puppeteer.launch({ defaultViewport: { width: 1920, height: 1080 } });
-        const page = await browser.newPage();
+            const browser = await puppeteer.launch({ defaultViewport: { width: 1920, height: 1080 } });
+            const page = await browser.newPage();
 
-        for (const tld of found) {
-            await page.goto(`https://vencord.${tld}`);
-            await page.screenshot({ path: `./screenshots/${tld}.png` });
-            images.push(`./screenshots/${tld}.png`);
+            for (const tld of found) {
+                await page.goto(`https://vencord.${tld}`, { timeout: 0 });
+                await page.screenshot({ path: `./screenshots/${tld}.png` });
+                images.push(`./screenshots/${tld}.png`);
+            }
+
+            await browser.close();
+        } catch (e) {
+            console.error("Unable to take screenshot:", e);
         }
-
-        await browser.close();
 
         console.log("Took screenshots!");
     }
