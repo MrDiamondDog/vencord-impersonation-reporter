@@ -24,7 +24,8 @@ const timedOut: string[] = [];
 const whitelist = [
     "DEV",
     "TECH", // hostinger default page, it's been like this for months
-    "KZ" // just some random company
+    "KZ", // just some random company
+    "WIKI" // some random people who made a vencord wiki??? yeah idk either
 ];
 
 async function urlStatus(url: string) {
