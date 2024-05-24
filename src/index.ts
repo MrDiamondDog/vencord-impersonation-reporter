@@ -27,7 +27,8 @@ const whitelist = [
     "KZ", // just some random company
     "WIKI", // some random people who made a vencord wiki??? yeah idk either
     "CC", // vencoin to the moon
-    "ROCKS" // 100% official domain
+    "ROCKS", // 100% official domain
+    "APP", // it isnt spreading malware and its a pain to take down so idc
 ];
 
 async function urlStatus(url: string) {
