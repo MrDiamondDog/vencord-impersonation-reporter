@@ -29,6 +29,7 @@ const whitelist = [
     "CC", // vencoin to the moon
     "ROCKS", // 100% official domain
     "APP", // it isnt spreading malware and its a pain to take down so idc
+    "DE", // empty
 ];
 
 async function urlStatus(url: string) {
