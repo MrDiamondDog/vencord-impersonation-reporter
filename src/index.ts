@@ -122,6 +122,7 @@ function bufferToBlob(buffer: Buffer, type: string) {
         const body = new FormData();
 
         body.append("payload_json", JSON.stringify({
+            content: (found.length > 0 ? "<@523338295644782592>" : undefined),
             embeds: [{
                 title: "Impersonation Report",
                 description: (found.length > 0 ? `Found ${found.length} website(s)!` : "No websites found!"),
