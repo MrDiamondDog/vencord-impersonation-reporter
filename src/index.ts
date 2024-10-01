@@ -30,7 +30,8 @@ const whitelist = [
     "ROCKS", // 100% official domain
     "APP", // it isnt spreading malware and its a pain to take down so idc
     "DE", // empty
-    "PET" // redirect to vencord.dev
+    "PET", // redirect to vencord.dev
+    "ORG" // expired domain
 ];
 
 async function urlStatus(url: string) {
